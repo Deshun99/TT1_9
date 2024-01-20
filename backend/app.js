@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const app = express();
 const Country = require('./model/Country');
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use('/user', user_router);
 app.use('/destination', dest_router);
