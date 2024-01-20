@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose')
 const user_router = require('./routes/user-routes');
 const dest_router = require('./routes/destination-routes');
+const itinerary_router = require('./routes/itinerary-routes');
 const cors = require("cors");
 require("dotenv").config();
 
@@ -11,6 +12,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(express.json());
 app.use('/user', user_router);
 app.use('/destination', dest_router);
+app.use("/itinerary", itinerary_router);
 
 mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@techtrek.gbctebp.mongodb.net/mern-auth?retryWrites=true&w=majority`).then(() => {
     app.listen(5000);
