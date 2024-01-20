@@ -14,8 +14,8 @@ const destinationSchema = new Schema({
       validator: function (value) {
         return value.length <= 50;
       },
-      message: 'First name must be at most 50 characters long.'
-    }
+      message: "Name must be at most 50 characters long.",
+    },
   },
   notes: {
     type: String,

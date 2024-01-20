@@ -57,7 +57,7 @@ const deleteDestination = async (req, res, next) => {
     return res.status(400).json({ message: "Destination id not found" });
   }
 
-  await Destination.remove();
+  await Destination.deleteOne({ _id: req.params.id });
 
   return res.status(201).json({ message: req.params.id });
 };
