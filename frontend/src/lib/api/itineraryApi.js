@@ -16,7 +16,7 @@ export class ItineraryApi {
 	static async get() {}
 	static async create() {}
 	static async update(ItineraryId, data) {
-		return await axios.patch(`/${ItineraryId}`, data);
+		return await axios.patch(`/itinerary/update/${ItineraryId}`, data);
 	}
 	static async delete() {}
 }

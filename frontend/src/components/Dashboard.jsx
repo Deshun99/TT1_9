@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -25,56 +25,34 @@ import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import ProfileTableRow from "./ui/ProfileTableRow";
 import EditPopUp from "./Itinerary/EditModal";
+import { TOKEN_TYPE, TokenService } from "@/lib/service/tokenService";
 
 const Dashboard = () => {
-  const [itineraryData, setItineraryData] = useState([
-    {
-      title: "Graduation Trip",
-      budget: 10000,
-      country: "Singapore",
-      destinations: ["Merlion Park", "Singapore Zoo", "Gardens by the Bay"],
-    },
-    {
-      title: "Year End Trip",
-      budget: 20000,
-      country: "Malaysia",
-      destinations: ["Kuala Lumpur", "Penang", "Johor Bahru"],
-    },
-    {
-      title: "Exchange Trip",
-      budget: 5000,
-      country: "China",
-      destinations: ["Beijing", "Shanghai", "Guangzhou"],
-    },
-    {
-      title: "Honeymoon Trip",
-      budget: 8000,
-      country: "Japan",
-      destinations: ["Tokyo", "Osaka", "Kyoto"],
-    },
-  ]);
+  const [itineraryData, setItineraryData] = useState([]);
   const [isDeleteItinerary, setIsDeleteItinerary] = useState(false);
 
-  const fetchItinerary = async (user_id) => {
+  const fetchItinerary = async () => {
+    
     try {
       const response = await fetch(
-        `http://localhost:5000/api/itinerary/${user_id}`,
+        `http://localhost:5000/itinerary/retrieveAll/${TokenService.loadToken(TOKEN_TYPE.USER_ID)}`,
         {
           credentials: "include",
         }
       );
-
       if (!response.ok) {
         throw new Error(`Request failed with status ${response.status}`);
       }
 
       const data = await response.json();
-      setItineraryData(data);
-      console.log(data);
+      setItineraryData(data.itineraries);
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  useEffect(() => {
+    fetchItinerary()
+  })
 
   const handleDeleteItinerary = (itinerary_id) => {
     deleteItinerary(itinerary_id);
