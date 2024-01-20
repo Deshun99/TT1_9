@@ -3,42 +3,48 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const signup = async (req, res, next) => {
-    const { first_name, last_name, password, username } = req.body;
+  const { first_name, last_name, password, username } = req.body;
 
-    // Validate password length
-    if (password.length > 20) {
-        return res.status(400).json({ error: 'Password must be at most 20 characters long.' });
-    }
+  // Validate password length
+  if (password.length > 20) {
+    return res
+      .status(400)
+      .json({ error: "Password must be at most 20 characters long." });
+  }
 
-    let existingUser;
-    try {
-        existingUser = await User.findOne({ username });
-    } catch (err) {
-        console.log(err);
-    }
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ username });
+  } catch (err) {
+    console.log(err);
+  }
 
-    if (existingUser) {
-        return res.status(400).json({ message: "User already exists." })
-    }
+  if (existingUser) {
+    return res.status(400).json({ message: "User already exists." });
+  }
 
+  // For security reasons, we do not store password in plain text
+  const hashedPassword = bcrypt.hashSync(password);
+  const user = new User({
+    first_name,
+    last_name,
+    password: hashedPassword,
+    username,
+  });
 
-    // For security reasons, we do not store password in plain text
-    const hashedPassword = bcrypt.hashSync(password);
-    const user = new User({
-        first_name,
-        last_name,
-        password: hashedPassword,
-        username,
-    });
-
-    try {
-        await user.save();
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({ error: 'Error registering user.' });
-    }
-    return res.status(201).json({ message: "Signed up successfully" });
-}
+  try {
+    await user.save();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: "Error registering user." });
+  }
+  return res.status(201).json({
+    first_name: user.first_name,
+    last_name: user.last_name,
+    username: user.username,
+    message: "Signed up successfully",
+  });
+};
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;
@@ -58,14 +64,14 @@ const login = async (req, res, next) => {
     return res.status(400).json({ message: "Inavlid Username / Password" });
   }
   const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "35s",
+    expiresIn: "2h",
   });
 
   console.log("Generated Token\n", token);
 
-//   if (req.cookies[`${existingUser._id}`]) {
-//     req.cookies[`${existingUser._id}`] = "";
-//   }
+  //   if (req.cookies[`${existingUser._id}`]) {
+  //     req.cookies[`${existingUser._id}`] = "";
+  //   }
 
   res.cookie(String(existingUser._id), token, {
     path: "/",
@@ -74,9 +80,15 @@ const login = async (req, res, next) => {
     sameSite: "lax",
   });
 
-  return res
-    .status(200)
-    .json({ message: "Successfully Logged In", user: existingUser, token });
+  return res.status(200).json({
+    message: "Successfully Logged In",
+    user: {
+      first_name: existingUser.first_name,
+      last_name: existingUser.last_name,
+      username: existingUser.username,
+    },
+    token,
+  });
 };
 
 const verifyToken = (req, res, next) => {
