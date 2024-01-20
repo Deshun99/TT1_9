@@ -120,6 +120,32 @@ const retrieveItinerary = async (req, res) => {
     res.status(200).send({ itinerary: consolidatedItinerary });
 }
 
+const filterItineraryByCountry = async (req, res) => {
+    const { countryId } = req.params.id;
+
+    let itineraries;
+    try {
+        itineraries = await Itinerary.find({ country: countryId })
+            .populate({
+                path: 'country',
+                select: 'name',
+            })
+            .populate({
+                path: 'user',
+                select: 'first_name last_name',
+            });
+    } catch (e) {
+        console.log(e);
+    }
+
+    if (!itineraries || itineraries.length == 0) {
+        return res.status(400).send("Country has no itineraries");
+    }
+    console.log(itineraries.length);
+    return res.status(200).json(itineraries);
+
+}
+
 const updateItinerary = async (req, res) => {
     const findItinerary = await Itinerary.findById(req.params.id);
 
@@ -143,11 +169,11 @@ const getListofItineraryBasedOnDestination = async (req, res) => {
         const findDestinations = await ItineraryDestination.find({ destination_id: req.params.id });
 
         const listOfItineraries = [];
-        for(let i = 0; i < findDestinations.length; i++) {
+        for (let i = 0; i < findDestinations.length; i++) {
             const itinerary = await Itinerary.find({ itinerary_id: findDestinations[i].itinerary_id });
             listOfItineraries.push(itinerary);
         }
-        
+
         return res.status(201).json({ message: listOfItineraries });
     } catch (error) {
         console.error(error);
@@ -186,4 +212,5 @@ exports.deleteItinerary = deleteItinerary;
 exports.updateItinerary = updateItinerary;
 exports.retrieveItinerary = retrieveItinerary;
 exports.getListofItineraryBasedOnDestination =
-  getListofItineraryBasedOnDestination;
+    getListofItineraryBasedOnDestination;
+exports.filterItineraryByCountry = filterItineraryByCountry;
