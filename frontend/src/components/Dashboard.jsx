@@ -123,7 +123,7 @@ const Dashboard = () => {
       border: 0,
     },
   }));
-
+  const navigate = useNavigate();
   const styles = {
     paperContainer: {
       backgroundColor: "white",
