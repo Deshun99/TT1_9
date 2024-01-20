@@ -11,7 +11,7 @@ import {
   InputLabel,
   FormControl,
 } from '@mui/material';
-import { ItineraryApi } from './path-to-your-api/ItineraryApi'; // Update the path accordingly
+import { ItineraryApi } from '../../lib/api/itineraryApi';
 
 const CreateItinerary = () => {
   const [title, setTitle] = useState('');
@@ -22,9 +22,13 @@ const CreateItinerary = () => {
 
   useEffect(() => {
     // Fetch the list of destinations from your backend using the ItineraryApi
-    ItineraryApi.get().then((data) => {
-      setAvailableDestinations(data); // Update based on the actual data structure returned by your API
-    });
+    ItineraryApi.get()
+      .then((data) => {
+        setAvailableDestinations(data); // Update based on the actual data structure returned by your API
+      })
+      .catch((error) => {
+        console.error('Error fetching destinations:', error);
+      });
   }, []);
 
   const handleSubmit = async (e) => {
@@ -75,13 +79,42 @@ const CreateItinerary = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <Paper elevation={3} style={{ padding: 20, marginTop: 50 }}>
-        <Typography variant="h5" align="center">
+      <Paper elevation={3} style={{ padding: 20, marginTop: 50, marginBottom:50 }}>
+        <Typography variant="h5" align="center" style={{ marginBottom: 20 }}>
           Create Itinerary
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            {/* ... other form fields ... */}
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Title"
+                variant="outlined"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Country"
+                variant="outlined"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Budget"
+                variant="outlined"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                required
+              />
+            </Grid>
             {destinations.map((destination, index) => (
               <Grid item xs={12} key={index}>
                 <FormControl fullWidth variant="outlined">
@@ -92,17 +125,32 @@ const CreateItinerary = () => {
                     label={`Destination ${index + 1}`}
                     required
                   >
-                    {availableDestinations.map((option) => (
-                      <MenuItem key={option.id} value={option.name}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
+                    {availableDestinations &&
+                      availableDestinations.map((option) => (
+                        <MenuItem key={option.id} value={option.name}>
+                          {option.name}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </FormControl>
                 {/* ... other destination fields ... */}
               </Grid>
             ))}
-            {/* ... other buttons ... */}
+            <Grid item xs={12}>
+              <Button fullWidth variant="contained" onClick={handleAddDestination}>
+                Add Destination
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button type="submit" fullWidth variant="contained" color="primary">
+                Create
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button fullWidth variant="contained" onClick={handleCancel}>
+                Cancel
+              </Button>
+            </Grid>
           </Grid>
         </form>
       </Paper>
