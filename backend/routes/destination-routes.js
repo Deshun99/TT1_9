@@ -3,8 +3,9 @@ const { getDestination, editDestination, deleteDestination } = require("../contr
 
 const router = express.Router();
 
+
 router.get("/getDestination", getDestination);
-router.put("/editDestination", editDestination);
-router.delete("/deleteDestination", deleteDestination);
+router.put("/editDestination/:id", editDestination);
+router.delete("/deleteDestination/:id", deleteDestination);
 
 module.exports = router;
