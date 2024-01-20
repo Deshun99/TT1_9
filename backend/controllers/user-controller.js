@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const signup = async (req, res, next) => {
   const { first_name, last_name, password, username } = req.body;
+  console.log("signup request: ", req.body);
 
   // Validate password length
   if (password.length > 20) {
@@ -38,11 +39,24 @@ const signup = async (req, res, next) => {
     console.log(err);
     return res.status(500).json({ error: "Error registering user." });
   }
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: "2h",
+  });
+
+  console.log("Generated Token\n", token);
+
+  res.cookie(String(user._id), token, {
+    path: "/",
+    expires: new Date(Date.now() + 1000 * 30), // 30 seconds
+    httpOnly: true,
+    sameSite: "lax",
+  });
   return res.status(201).json({
     first_name: user.first_name,
     last_name: user.last_name,
     username: user.username,
     message: "Signed up successfully",
+    token,
   });
 };
 
