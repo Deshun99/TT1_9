@@ -3,6 +3,6 @@ const { createItinerary } = require('../controllers/itinerary-controller');
 
 const router = express.Router();
 
-router.post('/itinerary', createItinerary);
+router.post('/create', createItinerary);
 
 module.exports = router;
