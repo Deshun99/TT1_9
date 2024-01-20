@@ -36,6 +36,7 @@ export class AuthApi {
   }
   static async signUp({ request }) {
     try {
+		console.log("signup request: ", request);
       const data = await request.formData();
       const registrationData = {
         first_name: data.get("first_name"),

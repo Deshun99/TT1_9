@@ -27,15 +27,14 @@ const SignUpForm = () => {
 
 	const submit = useSubmit();
 	const hookFormObj = {
-		defaultValues: {
-			name: "",
-			username: "",
-			email: "",
-			password: "",
-			phoneNum: "",
-		},
-		resolver: yupResolver(signUpFormSchema),
-	};
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      username: "",
+      password: "",
+    },
+    resolver: yupResolver(signUpFormSchema),
+  };
 	const onSubmit = (values) => {
 		submit(values, { method: "post" });
 	};
@@ -59,7 +58,7 @@ const SignUpForm = () => {
             <>
               <FormField
                 control={form.control}
-                name='First Name'
+                name='first_name'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
@@ -72,7 +71,7 @@ const SignUpForm = () => {
               />
               <FormField
                 control={form.control}
-                name='Last Name'
+                name='last_name'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
