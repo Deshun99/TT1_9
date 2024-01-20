@@ -2,7 +2,6 @@ const Itinerary = require('../model/Itinerary');
 const ItineraryDestination = require('../model/ItineraryDestination');
 const Destination = require('../model/Destination');
 const Country = require('../model/Country');
-const User = require('../model/User');
 
 const createItinerary = async (req, res, next) => {
     const { userId, itineraryTitle, budget, countryId, destinationIds } = req.body;
@@ -43,6 +42,7 @@ async function createItineraryDestination(itinerary_id, destination_id) {
         return e
     }
 }
+
 
 // pass the entire destination object as well
 const retrieveUserItineraries = async (req, res, next) => {
@@ -138,6 +138,23 @@ const updateItinerary = async (req, res) => {
     return res.status(201).json({ message: updateItinerary });
 }
 
+const getListofItineraryBasedOnDestination = async (req, res) => {
+    try {
+        const findDestinations = await ItineraryDestination.find({ destination_id: req.params.id });
+
+        const listOfItineraries = [];
+        for(let i = 0; i < findDestinations.length; i++) {
+            const itinerary = await Itinerary.find({ itinerary_id: findDestinations[i].itinerary_id });
+            listOfItineraries.push(itinerary);
+        }
+        
+        return res.status(201).json({ message: listOfItineraries });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Itinerary not deleted successfully." });
+    }
+}
+
 const deleteItinerary = async (req, res) => {
     try {
         const findItinerary = await Itinerary.findById(req.params.itineraryId);
@@ -168,3 +185,5 @@ exports.retrieveUserItineraries = retrieveUserItineraries;
 exports.deleteItinerary = deleteItinerary;
 exports.updateItinerary = updateItinerary;
 exports.retrieveItinerary = retrieveItinerary;
+exports.getListofItineraryBasedOnDestination =
+  getListofItineraryBasedOnDestination;
