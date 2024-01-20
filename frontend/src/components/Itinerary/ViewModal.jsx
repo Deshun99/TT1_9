@@ -2,9 +2,11 @@
 
 import { Modal, Button, Box, TextField, Typography, Table, TableContainer, TableCell, TableRow, TableHead, TableBody } from '@mui/material';
 import Paper from "@mui/material/Paper";
+import { Dialog, DialogContent, DialogActions } from '@mui/material';
 import * as React from 'react';
 
-export default function ViewItinerary() {
+const ViewPopUp = ({ itineraryId }) => {
+  
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -20,11 +22,6 @@ export default function ViewItinerary() {
   };
 
   // todo: link api call here?
-  // const itinerary_detail = [
-  //   {
-  //     field: "itinerary_id"
-  //   }
-  // ]
 
   // const destination_detail = [
   //   {
@@ -35,60 +32,58 @@ export default function ViewItinerary() {
   return (
     <div>
       <Button onClick={handleOpen}>View</Button>
-      <Modal
+      <Dialog
         open={open}
-        onClose={handleClose}
-      >
-        <Box sx={boxStyle}>
+        onClose={handleClose}>
+        <DialogContent>
+          {/* <Box sx={boxStyle}> */}
           <Typography variant="h4" component="h3" align='center'>Itinerary Details</Typography>
-          <br/>
+
+          <br />
           <div align='center'>
             <TextField
               required
-              label = "Itinerary Name"
+              label="Itinerary Name"
               id="filled-required"
-              //value={itinerary_detail.name} // link data
-              value = "name"
+              value={itinerary_detail.itineraryTitle} // link data
               variant="filled"
               InputProps={{
                 readOnly: true,
               }}
             />
           </div>
-          <br/>
+          <br />
           <div align='center'>
             <TextField
               required
-              label = "Budget ($)"
+              label="Budget ($)"
               id="filled-required"
-              value="budget" 
-              // value={itinerary_detail.budget} // link data
+              value={itinerary_detail.budget} // link data
               variant="filled"
               InputProps={{
                 readOnly: true,
               }}
             />
           </div>
-          <br/>
+          <br />
           <div align='center'>
             <TextField
               required
-              label = "Country"
+              label="Country"
               id="filled-required"
-              value = "country"
-              //value={itinerary_detail.country} // link data
+              value={itinerary_detail.country} // link data
               variant="filled"
               InputProps={{
                 readOnly: true,
               }}
             />
           </div>
-          <div>
+          <div align='center'>
             <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <Table sx={{ minWidth: 650 }}>
                 <TableHead>
                   <TableRow>
-                    <TableCell align='center' size='medium'>List of Destinations</TableCell>
+                    <TableCell>List of Destinations</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -107,10 +102,15 @@ export default function ViewItinerary() {
               </Table>
             </TableContainer>
           </div>
-        </Box>
-      </Modal>
+        </DialogContent>
+        {/* </Box> */}
+      </Dialog>
+      <DialogActions>
+        <Button autoFocus onClick={handleClose}>
+          Save changes
+        </Button>
+      </DialogActions>
     </div>
-
   );
-
-}
+};
+export default ViewPopUp;
