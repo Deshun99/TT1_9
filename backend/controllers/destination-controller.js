@@ -29,4 +29,13 @@ const destination = async (req, res, next) => {
   return res.status(201).json({ message: user });
 };
 
+const editDestination = async (req, res, next) => {
+
+}
+
+const deleteDestination = async (req, res, next) => {
+
+
+};
+
 exports.destination = destination;
