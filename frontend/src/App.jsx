@@ -8,7 +8,7 @@ import { AuthApi } from "./lib/api/authApi";
 import { AuthService } from "./lib/service/authService";
 import { redirect } from "react-router-dom";
 import Itinerary from "./components/Itinerary/Itinerary";
-import { ItineraryApi } from "./lib/api/ItineraryApi";
+// import { ItineraryApi } from "./lib/api/ItineraryApi";
 import Dashboard from "./components/Dashboard";
 import CreateItinerary from "./components/Itinerary/createItinerary";
 function App() {

@@ -29,6 +29,13 @@ const CreateItinerary = () => {
       .catch((error) => {
         console.error('Error fetching destinations:', error);
       });
+    ItineraryApi.get('http://localhost:5000/country/getAllCountries')
+      .then((data) => {
+        setAvailableCountries(data); // Update based on the actual data structure returned by your API
+      })
+      .catch((error) => {
+        console.error('Error fetching countries:', error);
+      });
   }, []);
 
   const handleSubmit = async (e) => {
