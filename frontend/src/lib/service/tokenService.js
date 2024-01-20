@@ -1,9 +1,10 @@
 
 
 export const TOKEN_TYPE = {
-    ACCESS: "access_token",
-    REFRESH: "refresh_token"
-}
+  ACCESS: "access_token",
+  REFRESH: "refresh_token",
+  USER_ID: "user_id",
+};
 export class TokenService {
   static setToken(tokenType, token) {
     if (token) localStorage.setItem(tokenType, token);
