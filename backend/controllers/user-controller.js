@@ -1,11 +1,25 @@
 const User = require('../model/User');
+const bcrypt = require("bcryptjs");
 
 const signup = async (req, res, next) => {
+    const { first_name, last_name, password, username } = req.body;
+    let existingUser;
+    try {
+        existingUser = await User.findOne({ username });
+    } catch (err) {
+        console.log(err);
+    }
+
+    if (existingUser) {
+        return res.status(400).json({ message: "User already exists." })
+    }
+    // For security reasons, we do not store password in plain text
+    const hashedPassword = bcrypt.hashSync(password);
     const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        role: req.body.role
+        first_name,
+        last_name,
+        password: hashedPassword,
+        username,
     });
 
     try {
