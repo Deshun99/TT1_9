@@ -48,7 +48,8 @@ const CreateItinerary = () => {
       .catch((error) => {
         console.error("Error fetching countries:", error);
       });
-  }, [availableDestinations, availableCountries]);
+  // }, [availableDestinations, availableCountries]);
+}, []);
   const handleDashboard = {
 
   }
