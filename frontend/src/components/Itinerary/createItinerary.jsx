@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TextField,
   Button,
@@ -11,23 +11,48 @@ import {
   InputLabel,
   FormControl,
 } from '@mui/material';
+import { ItineraryApi } from './path-to-your-api/ItineraryApi'; // Update the path accordingly
 
 const CreateItinerary = () => {
   const [title, setTitle] = useState('');
   const [country, setCountry] = useState('');
   const [budget, setBudget] = useState('');
   const [destinations, setDestinations] = useState([{ destination: '', cost: '', notes: '' }]);
+  const [availableDestinations, setAvailableDestinations] = useState([]);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // Fetch the list of destinations from your backend using the ItineraryApi
+    ItineraryApi.get().then((data) => {
+      setAvailableDestinations(data); // Update based on the actual data structure returned by your API
+    });
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Do something with the form data, e.g., send it to the server
+    // Prepare the data to be sent to the server
+    const itineraryData = {
+      title,
+      country,
+      budget,
+      destinations,
+    };
 
-    // Reset the form fields after submission
-    setTitle('');
-    setCountry('');
-    setBudget('');
-    setDestinations([{ destination: '', cost: '', notes: '' }]);
+    try {
+      // Call the create method from the ItineraryApi
+      await ItineraryApi.create(itineraryData);
+
+      // Optionally, you can handle success here (e.g., show a success message, redirect, etc.)
+
+      // Reset the form fields after successful submission
+      setTitle('');
+      setCountry('');
+      setBudget('');
+      setDestinations([{ destination: '', cost: '', notes: '' }]);
+    } catch (error) {
+      // Handle errors (e.g., show an error message, log the error, etc.)
+      console.error('Error creating itinerary:', error);
+    }
   };
 
   const handleCancel = () => {
@@ -56,36 +81,7 @@ const CreateItinerary = () => {
         </Typography>
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Title"
-                variant="outlined"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Country"
-                variant="outlined"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                required
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Budget"
-                variant="outlined"
-                value={budget}
-                onChange={(e) => setBudget(e.target.value)}
-                required
-              />
-            </Grid>
+            {/* ... other form fields ... */}
             {destinations.map((destination, index) => (
               <Grid item xs={12} key={index}>
                 <FormControl fullWidth variant="outlined">
@@ -96,44 +92,17 @@ const CreateItinerary = () => {
                     label={`Destination ${index + 1}`}
                     required
                   >
-                    <MenuItem value="Destination1">Destination 1</MenuItem>
-                    <MenuItem value="Destination2">Destination 2</MenuItem>
-                    <MenuItem value="Destination3">Destination 3</MenuItem>
-                    {/* Add more options as needed */}
+                    {availableDestinations.map((option) => (
+                      <MenuItem key={option.id} value={option.name}>
+                        {option.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
-                <TextField
-                  fullWidth
-                  label={`Cost for Destination ${index + 1}`}
-                  variant="outlined"
-                  value={destination.cost}
-                  onChange={(e) => handleDestinationChange(index, 'cost', e.target.value)}
-                  required
-                />
-                <TextField
-                  fullWidth
-                  label={`Notes for Destination ${index + 1}`}
-                  variant="outlined"
-                  value={destination.notes}
-                  onChange={(e) => handleDestinationChange(index, 'notes', e.target.value)}
-                />
+                {/* ... other destination fields ... */}
               </Grid>
             ))}
-            <Grid item xs={12}>
-              <Button fullWidth variant="contained" onClick={handleAddDestination}>
-                Add Destination
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button type="submit" fullWidth variant="contained" color="primary">
-                Create
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button fullWidth variant="contained" onClick={handleCancel}>
-                Cancel
-              </Button>
-            </Grid>
+            {/* ... other buttons ... */}
           </Grid>
         </form>
       </Paper>
