@@ -5,21 +5,45 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     first_name: {
         type: String,
-        required: true
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value.length <= 50;
+            },
+            message: 'First name must be at most 50 characters long.'
+        }
     },
     last_name: {
         type: String,
         required: true,
+        validate: {
+            validator: function (value) {
+                return value.length <= 50;
+            },
+            message: 'Last name must be at most 50 characters long.'
+        }
     },
     password: {
         type: String,
         required: true,
-        minlength: 6
+        minlength: 6,
+        validate: {
+            validator: function (value) {
+                return value.length <= 20;
+            },
+            message: 'Password must be at most 20 characters long.'
+        }
     },
     username: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        validate: {
+            validator: function (value) {
+                return value.length <= 20;
+            },
+            message: 'Username must be at most 20 characters long.'
+        }
     }
 });
 
