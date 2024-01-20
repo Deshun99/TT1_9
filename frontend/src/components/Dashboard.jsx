@@ -25,8 +25,12 @@ import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import ProfileTableRow from "./ui/ProfileTableRow";
 import EditPopUp from "./Itinerary/EditModal";
+import ViewModal from "./Itinerary/ViewModal";
 
 const Dashboard = () => {
+  const [selectedData, setSelectedData] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [itineraryData, setItineraryData] = useState([
     {
       title: "Graduation Trip",
@@ -100,6 +104,11 @@ const Dashboard = () => {
       console.error("Error deleting data:", error);
     }
   };
+
+  function handleChosenItinerary(data) {
+    setSelectedData(data);
+    setIsModalOpen((prev) => !prev);
+  }
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -226,6 +235,7 @@ const Dashboard = () => {
                           <Button
                             variant="contained"
                             sx={{ marginInline: 1 }}
+                            onClick={() => handleChosenItinerary(data)}
                           >
                             View
                           </Button>
@@ -332,6 +342,7 @@ const Dashboard = () => {
           </Paper>
         </Grid>
       </Grid>
+      {isModalOpen && <ViewModal itineraryData={selectedData} />}
     </Box>
   );
 };
