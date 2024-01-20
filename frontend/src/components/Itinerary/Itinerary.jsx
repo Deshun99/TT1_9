@@ -5,7 +5,7 @@ import EditPopUp from './EditModal'
 
 const Itinerary = () => {
   return (
-    <EditPopUp/>
+    <EditPopUp destinationList={[]}/>
   )
 }
 

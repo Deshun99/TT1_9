@@ -1,7 +1,6 @@
 const Destination = require("../model/Destination");
 const Country = require("../model/Country");
 
-
 const createDestination = async (req, res, next) => {
   const { cost, name, notes, country } = req.body;
 
@@ -32,8 +31,15 @@ const createDestination = async (req, res, next) => {
 };
 
 const getDestination = async (req, res) => {
-  const destinations = await Destination.find();
-  return res.status(201).json(destinations);
+  try {
+    const destinations = await Destination.findById(req.params.id).populate(
+      "country"
+    );
+    res.status(200).json(destinations);
+  } catch (error) {
+    console.error("Error fetching destinations: ", error);
+    res.status(500).json({ error: "Error fetching destinations." });
+  }
 }
 
 const editDestination = async (req, res) => {
@@ -62,7 +68,18 @@ const deleteDestination = async (req, res, next) => {
   return res.status(201).json({ message: req.params.id });
 };
 
+const getAllDestinations = async (req, res) => {
+  try {
+    const destinations = await Destination.find().populate('country');
+    res.status(200).json(destinations);
+  } catch (error) {
+    console.error('Error fetching destinations: ', error);
+    res.status(500).json({ error: 'Error fetching destinations.' });
+  }
+};
+
 exports.createDestination = createDestination;
 exports.getDestination = getDestination;
 exports.editDestination = editDestination;
 exports.deleteDestination = deleteDestination;
+exports.getAllDestinations = getAllDestinations;
