@@ -3,33 +3,42 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const signup = async (req, res, next) => {
-  const { first_name, last_name, password, username } = req.body;
-  let existingUser;
-  try {
-    existingUser = await User.findOne({ username });
-  } catch (err) {
-    console.log(err);
-  }
+    const { first_name, last_name, password, username } = req.body;
 
-  if (existingUser) {
-    return res.status(400).json({ message: "User already exists." });
-  }
-  // For security reasons, we do not store password in plain text
-  const hashedPassword = bcrypt.hashSync(password);
-  const user = new User({
-    first_name,
-    last_name,
-    password: hashedPassword,
-    username,
-  });
+    // Validate password length
+    if (password.length > 20) {
+        return res.status(400).json({ error: 'Password must be at most 20 characters long.' });
+    }
 
-  try {
-    await user.save();
-  } catch (err) {
-    console.log(err);
-  }
-  return res.status(201).json({ message: user });
-};
+    let existingUser;
+    try {
+        existingUser = await User.findOne({ username });
+    } catch (err) {
+        console.log(err);
+    }
+
+    if (existingUser) {
+        return res.status(400).json({ message: "User already exists." })
+    }
+
+
+    // For security reasons, we do not store password in plain text
+    const hashedPassword = bcrypt.hashSync(password);
+    const user = new User({
+        first_name,
+        last_name,
+        password: hashedPassword,
+        username,
+    });
+
+    try {
+        await user.save();
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'Error registering user.' });
+    }
+    return res.status(201).json({ message: user })
+}
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;
@@ -54,9 +63,9 @@ const login = async (req, res, next) => {
 
   console.log("Generated Token\n", token);
 
-  if (req.cookies[`${existingUser._id}`]) {
-    req.cookies[`${existingUser._id}`] = "";
-  }
+//   if (req.cookies[`${existingUser._id}`]) {
+//     req.cookies[`${existingUser._id}`] = "";
+//   }
 
   res.cookie(String(existingUser._id), token, {
     path: "/",

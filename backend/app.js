@@ -11,7 +11,7 @@ app.use(express.json());
 app.use("/api", userRouter);
 
 mongoose.connect(`mongodb+srv://admin:${process.env.MONGODB_PASSWORD}@techtrek.gbctebp.mongodb.net/mern-auth?retryWrites=true&w=majority`).then(() => {
-    app.listen(5001);
+    app.listen(5000);
     console.log("Successfully connected to MongoDB! Listening to localhost 5000");
 })
     .catch((err) => console.log(err));
