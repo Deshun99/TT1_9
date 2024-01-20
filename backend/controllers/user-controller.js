@@ -115,6 +115,6 @@ const findUsers = async (req, res) => {
 exports.signup = signup;
 // exports.logout = logout;
 exports.login = login;
-exports.findUser = findUsers;
+exports.findUsers = findUsers;
 // exports.verifyToken = verifyToken;
 // exports.refreshToken = refreshToken;
