@@ -10,12 +10,15 @@ const destinationSchema = new Schema({
   name: {
     type: String,
     required: true,
-    minlength: 6,
+    validate: {
+      validator: function (value) {
+        return value.length <= 50;
+      },
+      message: "Name must be at most 50 characters long.",
+    },
   },
   notes: {
     type: String,
-    required: true,
-    default: "user",
   },
   country: {
     type: Schema.Types.ObjectId,

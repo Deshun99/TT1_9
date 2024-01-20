@@ -7,19 +7,30 @@ import SignUpForm from "./components/auth/SignUpForm";
 import { AuthApi } from "./lib/api/authApi";
 import { AuthService } from "./lib/service/authService";
 import { redirect } from "react-router-dom";
+import Itinerary from "./components/Itinerary/Itinerary";
+import { ItineraryApi } from "./lib/api/ItineraryApi";
 function App() {
 	const router = createBrowserRouter([
 		{
 			path: "/",
-			loader: () => (AuthService.checkAuth() ? null : redirect("/auth/signin")),
+			// loader: () => (AuthService.checkAuth() ? null : redirect("/auth/signin")),
 			element: <Layout />,
 			id: "root",
-			children: [],
+			children: [
+				{
+					path: "itinerary",
+					element: <Itinerary />,
+					action: ({ params, request }) => {
+						const { method } = request;
+						
+					},
+				},
+			],
 		},
 		{
 			path: "/auth",
 			element: <AuthLayout />,
-			loader: () => (AuthService.checkAuth() ? redirect("/") : null),
+			// loader: () => (AuthService.checkAuth() ? redirect("/") : null),
 			id: "auth",
 			children: [
 				{
