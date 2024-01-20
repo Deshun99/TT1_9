@@ -31,8 +31,15 @@ const createDestination = async (req, res, next) => {
 };
 
 const getDestination = async (req, res) => {
-  const destinations = await Destination.find();
-  return res.status(201).json(destinations);
+  try {
+    const destinations = await Destination.findById(req.params.id).populate(
+      "country"
+    );
+    res.status(200).json(destinations);
+  } catch (error) {
+    console.error("Error fetching destinations: ", error);
+    res.status(500).json({ error: "Error fetching destinations." });
+  }
 }
 
 const editDestination = async (req, res) => {

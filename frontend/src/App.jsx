@@ -9,6 +9,7 @@ import { AuthService } from "./lib/service/authService";
 import { redirect } from "react-router-dom";
 import Itinerary from "./components/Itinerary/Itinerary";
 import { ItineraryApi } from "./lib/api/ItineraryApi";
+import Dashboard from "./components/Dashboard";
 function App() {
 	const router = createBrowserRouter([
 		{
@@ -24,6 +25,10 @@ function App() {
 						const { method } = request;
 						
 					},
+				},
+				{
+					path: "dashboard",
+					element: <Dashboard />,
 				},
 			],
 		},
