@@ -1,24 +1,24 @@
 const Destination = require("../model/Destination");
 
-const destination1 = async (req, res, next) => {
-  const { first_name, last_name, password, username } = req.body;
-  let existingUser;
-  try {
-    existingUser = await User.findOne({ username });
-  } catch (err) {
-    console.log(err);
-  }
+const destination = async (req, res, next) => {
+  const { cost, name, notes, country } = req.body;
+  // let existingUser;
+  // try {
+  //   existingUser = await Destination.findOne({ username });
+  // } catch (err) {
+  //   console.log(err);
+  // }
 
-  if (existingUser) {
-    return res.status(400).json({ message: "User already exists." });
-  }
+  // if (existingUser) {
+  //   return res.status(400).json({ message: "User already exists." });
+  // }
   // For security reasons, we do not store password in plain text
-  const hashedPassword = bcrypt.hashSync(password);
-  const user = new User({
-    first_name,
-    last_name,
-    password: hashedPassword,
-    username,
+  // const hashedPassword = bcrypt.hashSync(password);
+  const destination = new Destination({
+    cost,
+    name,
+    notes,
+    country,
   });
 
   try {
@@ -29,4 +29,38 @@ const destination1 = async (req, res, next) => {
   return res.status(201).json({ message: user });
 };
 
-exports.destination = destination1;
+const getDestination = async (req, res) => {
+  const destinations = await Destination.find();
+  return res.status(201).json(destinations);
+}
+
+const editDestination = async (req, res) => {
+  const findDestination = await Destination.findById(req.params.id);
+
+  if (!findDestination) {
+    return res.status(400).json({ message: "Destination id not found" });
+  }
+
+  const updatedDestination = await Destination.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  })
+
+  return res.status(201).json({ message: updatedDestination });
+}
+
+const deleteDestination = async (req, res, next) => {
+  const findDestination = await Destination.findById(req.params.id);
+
+  if (!findDestination) {
+    return res.status(400).json({ message: "Destination id not found" });
+  }
+
+  await Destination.remove();
+
+  return res.status(201).json({ message: req.params.id });
+};
+
+exports.getDestination = getDestination;
+exports.editDestination = editDestination;
+exports.deleteDestination = deleteDestination;
+exports.destination = destination;
