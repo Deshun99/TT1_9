@@ -3,8 +3,8 @@ const { getDestination, editDestination, deleteDestination } = require("../contr
 
 const router = express.Router();
 
-router.post("/getDestination", getDestination);
-router.post("/editDestination", editDestination);
-router.post("/deleteDestination", deleteDestination);
+router.get("/getDestination", getDestination);
+router.put("/editDestination", editDestination);
+router.delete("/deleteDestination", deleteDestination);
 
 module.exports = router;
