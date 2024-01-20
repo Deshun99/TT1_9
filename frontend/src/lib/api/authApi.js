@@ -25,7 +25,7 @@ export class AuthApi {
       TokenService.setToken(TOKEN_TYPE.ACCESS, token);
       //   TokenService.setToken(TOKEN_TYPE.REFRESH, tokenData.refresh);
 
-      return redirect("/");
+      return redirect("/dashboard");
     } catch (error) {
       if (error.response) {
         return error.response;
@@ -55,7 +55,7 @@ export class AuthApi {
 
       TokenService.setToken(TOKEN_TYPE.ACCESS, tokenData.token);
 
-      return redirect("/");
+      return redirect("/dashboard");
     } catch (error) {
       if (error.response) {
         return error.response;

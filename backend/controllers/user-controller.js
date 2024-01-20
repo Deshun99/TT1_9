@@ -39,7 +39,7 @@ const signup = async (req, res, next) => {
     console.log(err);
     return res.status(500).json({ error: "Error registering user." });
   }
-  const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET_KEY, {
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: "2h",
   });
 
