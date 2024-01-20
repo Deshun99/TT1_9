@@ -1,27 +1,43 @@
 const User = require('../model/User');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const signup = async (req, res, next) => {
-    const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        role: req.body.role
-    });
+  const { first_name, last_name, password, username } = req.body;
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ username });
+  } catch (err) {
+    console.log(err);
+  }
 
-    try {
-        await user.save();
-    } catch (err) {
-        console.log(err);
-    }
-    return res.status(201).json({ message: user })
-}
+  if (existingUser) {
+    return res.status(400).json({ message: "User already exists." });
+  }
+  // For security reasons, we do not store password in plain text
+  const hashedPassword = bcrypt.hashSync(password);
+  const user = new User({
+    first_name,
+    last_name,
+    password: hashedPassword,
+    username,
+  });
+
+  try {
+    await user.save();
+  } catch (err) {
+    console.log(err);
+  }
+  return res.status(201).json({ message: user });
+};
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
+  console.log(username, password);
 
   let existingUser;
   try {
-    existingUser = await User.findOne({ email: email });
+    existingUser = await User.findOne({ username: username });
   } catch (err) {
     return new Error(err);
   }
@@ -30,7 +46,7 @@ const login = async (req, res, next) => {
   }
   const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
   if (!isPasswordCorrect) {
-    return res.status(400).json({ message: "Inavlid Email / Password" });
+    return res.status(400).json({ message: "Inavlid Username / Password" });
   }
   const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET_KEY, {
     expiresIn: "35s",
