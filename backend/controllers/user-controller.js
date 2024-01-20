@@ -39,4 +39,10 @@ const signup = async (req, res, next) => {
     return res.status(201).json({ message: user })
 }
 
+const findUser = async (req, res) => {
+  const destinations = await User.find();
+  return res.status(201).json(destinations);
+};
+
+exports.findUser = findUser;
 exports.signup = signup;
