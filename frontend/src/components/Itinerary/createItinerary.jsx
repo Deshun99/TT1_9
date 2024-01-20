@@ -23,7 +23,6 @@ const CreateItinerary = () => {
   ]);
   const [availableDestinations, setAvailableDestinations] = useState([]);
   const [availableCountries, setAvailableCountries] = useState([]);
-
   useEffect(() => {
     // Fetch the list of destinations from your backend using the ItineraryApi
     ItineraryApi.get("http://localhost:5000/destination/getAllDestinations")
@@ -189,7 +188,7 @@ const CreateItinerary = () => {
             </Grid>
             <Grid item xs={6}>
               <Button fullWidth variant='contained' onClick={handleCancel}>
-                Cancel
+                Clear
               </Button>
             </Grid>
           </Grid>
