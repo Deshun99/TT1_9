@@ -22,12 +22,19 @@ const CreateItinerary = () => {
 
   useEffect(() => {
     // Fetch the list of destinations from your backend using the ItineraryApi
-    ItineraryApi.get()
+    ItineraryApi.get('http://localhost:5000/destination/getAllDestinations')
       .then((data) => {
         setAvailableDestinations(data); // Update based on the actual data structure returned by your API
       })
       .catch((error) => {
         console.error('Error fetching destinations:', error);
+      });
+    ItineraryApi.get('http://localhost:5000/country/getAllCountries')
+      .then((data) => {
+        setAvailableCountries(data); // Update based on the actual data structure returned by your API
+      })
+      .catch((error) => {
+        console.error('Error fetching countries:', error);
       });
   }, []);
 
@@ -133,7 +140,6 @@ const CreateItinerary = () => {
                       ))}
                   </Select>
                 </FormControl>
-                {/* ... other destination fields ... */}
               </Grid>
             ))}
             <Grid item xs={12}>
