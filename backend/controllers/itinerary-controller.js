@@ -87,12 +87,6 @@ const retrieveUserItineraries = async (req, res, next) => {
     res.status(200).send({ itineraries: consolidatedItineraries });
 }
 
-// only adding and removing of destinations
-const updateItinerary = async (req, res, next) => {
-const retrieveUserItineraries = async (req, res) => {
-    const { userId } = req.body;
-}
-
 const updateItinerary = async (req, res) => {
     const findItinerary = await Itinerary.findById(req.params.id);
 
@@ -104,7 +98,7 @@ const updateItinerary = async (req, res) => {
         req.params.id,
         req.body,
         {
-        new: true,
+            new: true,
         }
     );
 
@@ -116,17 +110,17 @@ const deleteItinerary = async (req, res) => {
         const findItinerary = await Itinerary.findById(req.params.id);
 
         if (!findItinerary) {
-          return res.status(400).json({ message: "Itinerary id not found" });
+            return res.status(400).json({ message: "Itinerary id not found" });
         }
 
         const itineraryDestinations = findItinerary.itineraryDestination;
 
-        for(let i = 0; i < itineraryDestinations.length; i++) {
+        for (let i = 0; i < itineraryDestinations.length; i++) {
             await ItineraryDestination.deleteOne({
-              _id: itineraryDestinations[i]._id,
+                _id: itineraryDestinations[i]._id,
             });
         }
-        
+
         await Itinerary.deleteOne({ _id: req.params.id });
 
         return res.status(201).json({ message: req.params.id });
