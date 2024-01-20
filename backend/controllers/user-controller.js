@@ -52,9 +52,12 @@ const signup = async (req, res, next) => {
     sameSite: "lax",
   });
   return res.status(201).json({
-    first_name: user.first_name,
-    last_name: user.last_name,
-    username: user.username,
+    user: {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      username: user.username,
+      user_id: user._id,
+    },
     message: "Signed up successfully",
     token,
   });
@@ -100,6 +103,7 @@ const login = async (req, res, next) => {
       first_name: existingUser.first_name,
       last_name: existingUser.last_name,
       username: existingUser.username,
+      user_id: existingUser._id,
     },
     token,
   });

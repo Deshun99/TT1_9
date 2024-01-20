@@ -23,6 +23,7 @@ export class AuthApi {
       console.log("response: ", response);
       console.log("token: ", token);
       TokenService.setToken(TOKEN_TYPE.ACCESS, token);
+      TokenService.setToken(TOKEN_TYPE.USER_ID, response.data.user.user_id);
       //   TokenService.setToken(TOKEN_TYPE.REFRESH, tokenData.refresh);
 
       return redirect("/dashboard");
@@ -54,6 +55,7 @@ export class AuthApi {
       const tokenData = response.data;
 
       TokenService.setToken(TOKEN_TYPE.ACCESS, tokenData.token);
+      TokenService.setToken(TOKEN_TYPE.USER_ID, response.data.user_id);
 
       return redirect("/dashboard");
     } catch (error) {
