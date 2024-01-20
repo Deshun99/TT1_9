@@ -25,8 +25,11 @@ import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import ProfileTableRow from "./ui/ProfileTableRow";
 import EditPopUp from "./Itinerary/EditModal";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+
+  const navigate = useNavigate();
   const [itineraryData, setItineraryData] = useState([
     {
       title: "Graduation Trip",
@@ -161,7 +164,7 @@ const Dashboard = () => {
               <Button variant="contained" sx={{ marginRight: 5 }}>
                 Update Country Destinations
               </Button>
-              <Fab color="primary">
+              <Fab color="primary" onClick= {()=> navigate("/createitinerary")}>
                 <AddIcon />
               </Fab>
             </Box>

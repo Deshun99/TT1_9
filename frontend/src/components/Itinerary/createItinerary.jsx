@@ -11,8 +11,14 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Snackbar
 } from "@mui/material";
 import { ItineraryApi } from "../../lib/api/itineraryApi";
+import { useNavigate } from 'react-router-dom';
 
 const CreateItinerary = () => {
   const [title, setTitle] = useState("");
@@ -23,6 +29,8 @@ const CreateItinerary = () => {
   ]);
   const [availableDestinations, setAvailableDestinations] = useState([]);
   const [availableCountries, setAvailableCountries] = useState([]);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   useEffect(() => {
     // Fetch the list of destinations from your backend using the ItineraryApi
     ItineraryApi.get("http://localhost:5000/destination/getAllDestinations")
@@ -41,7 +49,9 @@ const CreateItinerary = () => {
         console.error("Error fetching countries:", error);
       });
   }, [availableDestinations, availableCountries]);
+  const handleDashboard = {
 
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -70,13 +80,7 @@ const CreateItinerary = () => {
     }
   };
 
-  const handleCancel = () => {
-    // Add logic to handle cancel, e.g., redirect to another page or clear the form
-    setTitle("");
-    setCountry("");
-    setBudget("");
-    setDestinations([{ destination: "", cost: "", notes: "" }]);
-  };
+  const navigate = useNavigate();
 
   const handleAddDestination = () => {
     setDestinations([
@@ -90,7 +94,18 @@ const CreateItinerary = () => {
     newDestinations[index][property] = value;
     setDestinations(newDestinations);
   };
+  const handleConfirmationClose = () => {
+    // Close the confirmation dialog
+    setOpenConfirmation(false);
 
+    // Show a snackbar to indicate that the form has been submitted
+    setOpenSnackbar(true);
+  };
+
+  const handleSnackbarClose = () => {
+    // Close the snackbar
+    setOpenSnackbar(false);
+  };
   return (
     <Container component='main' maxWidth='xs'>
       <Paper elevation={3} style={{ padding: 20, marginTop: 50 }}>
@@ -182,18 +197,39 @@ const CreateItinerary = () => {
                 fullWidth
                 variant='contained'
                 color='primary'
+                onClick= {()=> navigate("/dashboard")}
               >
                 Create
               </Button>
             </Grid>
             <Grid item xs={6}>
-              <Button fullWidth variant='contained' onClick={handleCancel}>
-                Clear
+              <Button fullWidth variant='contained' onClick= {()=> navigate("/dashboard")}>
+                Cancel
               </Button>
             </Grid>
           </Grid>
         </form>
       </Paper>
+    <Dialog open={openConfirmation} onClose={handleConfirmationClose}>
+        <DialogTitle>Submission Confirmation</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">The form has been successfully submitted!</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmationClose} color="primary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar for Submission Confirmation */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        message="The form has been successfully submitted!"
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      />
     </Container>
   );
 };
