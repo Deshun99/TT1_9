@@ -130,10 +130,6 @@ const deleteItinerary = async (req, res) => {
     }
 }
 
-async function deleteItineraryDestinations() {
-
-}
-
 exports.createItinerary = createItinerary;
 exports.retrieveUserItineraries = retrieveUserItineraries;
 exports.deleteItinerary = deleteItinerary;
