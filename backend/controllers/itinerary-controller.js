@@ -142,9 +142,14 @@ const getListofItineraryBasedOnDestination = async (req, res) => {
     try {
         const findDestinations = await ItineraryDestination.find({ destination_id: req.params.id });
 
+        console.log(findDestinations);
+
         const listOfItineraries = [];
         for(let i = 0; i < findDestinations.length; i++) {
-            const itinerary = await Itinerary.find({ itinerary_id: findDestinations[i].itinerary_id });
+            console.log(findDestinations[0].itinerary_id);
+            const itinerary = await Itinerary.findById(
+              findDestinations[0].itinerary_id
+            );
             listOfItineraries.push(itinerary);
         }
         
