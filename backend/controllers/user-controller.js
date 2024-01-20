@@ -37,7 +37,7 @@ const signup = async (req, res, next) => {
         console.log(err);
         return res.status(500).json({ error: 'Error registering user.' });
     }
-    return res.status(201).json({ message: user })
+    return res.status(201).json({ message: "Signed up successfully" });
 }
 
 const login = async (req, res, next) => {
