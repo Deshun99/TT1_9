@@ -38,14 +38,18 @@ export class AuthApi {
     try {
       const data = await request.formData();
       const registrationData = {
-        name: data.get("name"),
+        first_name: data.get("first_name"),
+        last_name: data.get("last_name"),
         username: data.get("username"),
-        email: data.get("email"),
         password: data.get("password"),
-        phoneNum: data.get("phoneNum"),
       };
+      console.log("signup");
+      console.log(data);
 
-      const response = await axios.post("/api/auth/signup", registrationData);
+      const response = await axios.post(
+        `${AuthApi.AUTH_BASE_URL}/signup`,
+        registrationData
+      );
       const tokenData = response.data;
 
       TokenService.setToken(TOKEN_TYPE.ACCESS, tokenData.token);
