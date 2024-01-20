@@ -15,6 +15,6 @@ router.get('/retrieveAll/:userId', retrieveUserItineraries);
 router.get('/retrieveSingular/:itineraryId', retrieveItinerary);
 router.delete('/delete/:itineraryId', deleteItinerary);
 router.put("/update/:id", updateItinerary);
-router.get("/getListBasedOnDestinationId/", getListofItineraryBasedOnDestination);
+router.get("/getListBasedOnDestinationId/:id", getListofItineraryBasedOnDestination);
 
 module.exports = router;
