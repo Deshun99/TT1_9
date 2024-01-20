@@ -1,32 +1,34 @@
 const Destination = require("../model/Destination");
+const Country = require("../model/Country");
 
-const destination = async (req, res, next) => {
+
+const createDestination = async (req, res, next) => {
   const { cost, name, notes, country } = req.body;
-  // let existingUser;
-  // try {
-  //   existingUser = await Destination.findOne({ username });
-  // } catch (err) {
-  //   console.log(err);
-  // }
-
-  // if (existingUser) {
-  //   return res.status(400).json({ message: "User already exists." });
-  // }
-  // For security reasons, we do not store password in plain text
-  // const hashedPassword = bcrypt.hashSync(password);
-  const destination = new Destination({
-    cost,
-    name,
-    notes,
-    country,
-  });
 
   try {
-    await user.save();
-  } catch (err) {
-    console.log(err);
+    // Check if the country exists
+    const countryName = await Country.findOne({ name: country });
+
+    if (!countryName) {
+      return res.status(400).json({ error: 'Country not found.' });
+    }
+
+    // Create a new destination with the country ID
+    const destination = new Destination({
+      cost,
+      name,
+      notes,
+      country: countryName._id,
+    });
+
+    // Save the destination to the database
+    await destination.save();
+
+    res.status(201).json({ message: 'Destination added successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error adding destination.' });
   }
-  return res.status(201).json({ message: user });
 };
 
 const getDestination = async (req, res) => {
@@ -60,7 +62,7 @@ const deleteDestination = async (req, res, next) => {
   return res.status(201).json({ message: req.params.id });
 };
 
+exports.createDestination = createDestination;
 exports.getDestination = getDestination;
 exports.editDestination = editDestination;
 exports.deleteDestination = deleteDestination;
-exports.destination = destination;

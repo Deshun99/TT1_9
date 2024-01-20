@@ -1,11 +1,11 @@
-const express = require("express");
-const { getDestination, editDestination, deleteDestination } = require("../controllers/destination-controller");
+const express = require('express');
+const { createDestination, getDestination, editDestination, deleteDestination } = require('../controllers/destination-controller')
 
-const router = express.Router();
+const dest_router = express.Router();
 
+dest_router.post("/createdestination", createDestination);
+dest_router.get("/getDestination", getDestination);
+dest_router.put("/editDestination", editDestination);
+dest_router.delete("/deleteDestination", deleteDestination);
 
-router.get("/getDestination", getDestination);
-router.put("/editDestination/:id", editDestination);
-router.delete("/deleteDestination/:id", deleteDestination);
-
-module.exports = router;
+module.exports = dest_router;
