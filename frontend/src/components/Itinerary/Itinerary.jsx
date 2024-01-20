@@ -1,10 +1,11 @@
 
 
 import React from 'react'
+import EditPopUp from './EditModal'
 
 const Itinerary = () => {
   return (
-    <div>Itinerary</div>
+    <EditPopUp/>
   )
 }
 
