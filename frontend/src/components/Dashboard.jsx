@@ -25,10 +25,36 @@ import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import ProfileTableRow from "./ui/ProfileTableRow";
 import EditPopUp from "./Itinerary/EditModal";
+import { useNavigate } from "react-router-dom";
 import { TOKEN_TYPE, TokenService } from "@/lib/service/tokenService";
 
 const Dashboard = () => {
-  const [itineraryData, setItineraryData] = useState([]);
+  const [itineraryData, setItineraryData] = useState([
+    {
+      title: "Graduation Trip",
+      budget: 10000,
+      country: "Singapore",
+      destinations: ["Merlion Park", "Singapore Zoo", "Gardens by the Bay"],
+    },
+    {
+      title: "Year End Trip",
+      budget: 20000,
+      country: "Malaysia",
+      destinations: ["Kuala Lumpur", "Penang", "Johor Bahru"],
+    },
+    {
+      title: "Exchange Trip",
+      budget: 5000,
+      country: "China",
+      destinations: ["Beijing", "Shanghai", "Guangzhou"],
+    },
+    {
+      title: "Honeymoon Trip",
+      budget: 8000,
+      country: "Japan",
+      destinations: ["Tokyo", "Osaka", "Kyoto"],
+    },
+  ]);
   const [isDeleteItinerary, setIsDeleteItinerary] = useState(false);
 
   const fetchItinerary = async () => {
@@ -139,7 +165,7 @@ const Dashboard = () => {
               <Button variant="contained" sx={{ marginRight: 5 }}>
                 Update Country Destinations
               </Button>
-              <Fab color="primary">
+              <Fab color="primary" onClick= {()=> navigate("/createitinerary")}>
                 <AddIcon />
               </Fab>
             </Box>
