@@ -87,6 +87,39 @@ const retrieveUserItineraries = async (req, res, next) => {
     res.status(200).send({ itineraries: consolidatedItineraries });
 }
 
+const retrieveItinerary = async (req, res) => {
+    const { itineraryId } = req.params;
+
+    let itinerary;
+
+    try {
+        itinerary = Itinerary.findById(itineraryId);
+    } catch (e) {
+        res.status(400).send({ message: e });
+    }
+
+    const country = await Country.findById(itinerary.country);
+    const itineraryDestinations = await ItineraryDestination.find({ itinerary_id: itinerary._id });
+
+    const destinations = [];
+
+    for (let i = 0; i < itineraryDestinations.length; i++) {
+        const itineraryDestination = itineraryDestinations[j];
+        const destinationDetails = await Destination.findById(itineraryDestination.destination_id);
+
+        destinations.push(destinationDetails);
+    }
+
+    const consolidatedItinerary = {
+        destinations,
+        country,
+        budget: itinerary.budget,
+        title: itinerary.title,
+    }
+
+    res.status(200).send({ itinerary: consolidatedItinerary });
+}
+
 const updateItinerary = async (req, res) => {
     const findItinerary = await Itinerary.findById(req.params.id);
 
@@ -107,7 +140,7 @@ const updateItinerary = async (req, res) => {
 
 const deleteItinerary = async (req, res) => {
     try {
-        const findItinerary = await Itinerary.findById(req.params.id);
+        const findItinerary = await Itinerary.findById(req.params.itineraryId);
 
         if (!findItinerary) {
             return res.status(400).json({ message: "Itinerary id not found" });
@@ -130,11 +163,8 @@ const deleteItinerary = async (req, res) => {
     }
 }
 
-async function deleteItineraryDestinations() {
-
-}
-
 exports.createItinerary = createItinerary;
 exports.retrieveUserItineraries = retrieveUserItineraries;
 exports.deleteItinerary = deleteItinerary;
 exports.updateItinerary = updateItinerary;
+exports.retrieveItinerary = retrieveItinerary;
