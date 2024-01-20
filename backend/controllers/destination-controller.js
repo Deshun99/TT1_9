@@ -32,6 +32,10 @@ const createDestination = async (req, res, next) => {
 
 const getDestination = async (req, res) => {
   const destinations = await Destination.find();
+
+  for(destination of destinations) {
+    destination.country = Country.findById(destination.country);
+  }
   return res.status(201).json(destinations);
 }
 
