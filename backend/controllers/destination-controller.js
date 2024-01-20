@@ -29,13 +29,38 @@ const destination = async (req, res, next) => {
   return res.status(201).json({ message: user });
 };
 
-const editDestination = async (req, res, next) => {
+const getDestination = async (req, res) => {
+  const destinations = await Destination.find();
+  return res.status(201).json(destinations);
+}
 
+const editDestination = async (req, res) => {
+  const findDestination = await Destination.findById(req.params.id);
+
+  if (!destination) {
+    return res.status(400).json({ message: "Destination id not found" });
+  }
+
+  const updatedDestination = await Destination.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  })
+
+  return res.status(201).json({ message: user });
 }
 
 const deleteDestination = async (req, res, next) => {
+  const findDestination = await Destination.findById(req.params.id);
 
+  if (!destination) {
+    return res.status(400).json({ message: "Destination id not found" });
+  }
 
+  await Destination.remove();
+
+  return res.status(201).json({ message: req.params.id });
 };
 
+exports.getDestination = getDestination;
+exports.editDestination = editDestination;
+exports.deleteDestination = deleteDestination;
 exports.destination = destination;
